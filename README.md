@@ -56,6 +56,7 @@ POST /api/users
 ```
 
 **Request Body:**
+
 ```json
 {
     "name": "John Doe",
@@ -64,6 +65,7 @@ POST /api/users
 ```
 
 **Response (201):**
+
 ```json
 {
     "data": {
@@ -83,6 +85,7 @@ GET /api/users/{id}
 ```
 
 **Response (200):**
+
 ```json
 {
     "data": {
@@ -118,6 +121,7 @@ POST /api/wallets
 ```
 
 **Request Body:**
+
 ```json
 {
     "user_id": 1,
@@ -127,6 +131,7 @@ POST /api/wallets
 ```
 
 **Response (201):**
+
 ```json
 {
     "data": {
@@ -148,6 +153,7 @@ GET /api/wallets/{id}
 ```
 
 **Response (200):**
+
 ```json
 {
     "data": {
@@ -193,16 +199,18 @@ POST /api/transactions
 ```
 
 **Request Body:**
+
 ```json
 {
     "wallet_id": 1,
     "type": "income",
-    "amount": 5000.00,
+    "amount": 5000.0,
     "description": "Salary"
 }
 ```
 
 **Response (201):**
+
 ```json
 {
     "data": {
@@ -219,15 +227,15 @@ POST /api/transactions
 
 ## Validation Rules
 
-| Field       | Rules                                      |
-|-------------|--------------------------------------------|
-| name        | Required, string, max 255 characters       |
-| email       | Required, valid email, unique              |
-| user_id     | Required, must exist in users table        |
-| wallet_id   | Required, must exist in wallets table      |
-| type        | Required, must be `income` or `expense`    |
-| amount      | Required, numeric, greater than 0          |
-| description | Optional, string, max 255 characters       |
+| Field       | Rules                                   |
+| ----------- | --------------------------------------- |
+| name        | Required, string, max 255 characters    |
+| email       | Required, valid email, unique           |
+| user_id     | Required, must exist in users table     |
+| wallet_id   | Required, must exist in wallets table   |
+| type        | Required, must be `income` or `expense` |
+| amount      | Required, numeric, greater than 0       |
+| description | Optional, string, max 255 characters    |
 
 Validation errors return a `422` response with error details.
 
