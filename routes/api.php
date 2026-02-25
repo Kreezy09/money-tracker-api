@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,6 @@ Route::get('/users/{user}', [UserController::class, 'show']);
 // Wallet routes
 Route::post('/wallets', [WalletController::class, 'store']);
 Route::get('/wallets/{wallet}', [WalletController::class, 'show']);
+
+// Transaction routes
+Route::post('/transactions', [TransactionController::class, 'store']);
