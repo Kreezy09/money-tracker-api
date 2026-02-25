@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WalletResource;
 use App\Models\Wallet;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,34 +27,22 @@ class WalletController extends Controller
         // Create the wallet
         $wallet = Wallet::create($validated);
 
-        return response()->json([
-            'message' => 'Wallet created successfully.',
-            'data'    => $wallet,
-        ], 201);
+        return (new WalletResource($wallet))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
      * Display a specific wallet with its balance and all transactions.
      *
      * @param Wallet $wallet
-     * @return JsonResponse
+     * @return WalletResource
      */
-    public function show(Wallet $wallet): JsonResponse
+    public function show(Wallet $wallet): WalletResource
     {
         // Eager-load transactions for this wallet
         $wallet->load('transactions');
 
-        return response()->json([
-            'data' => [
-                'id'           => $wallet->id,
-                'user_id'      => $wallet->user_id,
-                'name'         => $wallet->name,
-                'description'  => $wallet->description,
-                'balance'      => $wallet->balance,
-                'transactions' => $wallet->transactions,
-                'created_at'   => $wallet->created_at,
-                'updated_at'   => $wallet->updated_at,
-            ],
-        ]);
+        return new WalletResource($wallet);
     }
 }

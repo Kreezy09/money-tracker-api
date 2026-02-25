@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,9 +28,8 @@ class TransactionController extends Controller
         // Create the transaction
         $transaction = Transaction::create($validated);
 
-        return response()->json([
-            'message' => 'Transaction created successfully.',
-            'data'    => $transaction,
-        ], 201);
+        return (new TransactionResource($transaction))
+            ->response()
+            ->setStatusCode(201);
     }
 }

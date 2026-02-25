@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -25,10 +26,9 @@ class UserController extends Controller
         // Create the user
         $user = User::create($validated);
 
-        return response()->json([
-            'message' => 'User created successfully.',
-            'data'    => $user,
-        ], 201);
+        return (new UserResource($user))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -36,35 +36,13 @@ class UserController extends Controller
      * and the total balance across all wallets.
      *
      * @param User $user
-     * @return JsonResponse
+     * @return UserResource
      */
-    public function show(User $user): JsonResponse
+    public function show(User $user): UserResource
     {
-        // Eager-load wallets
+        // Eager-load wallets to include balances and totals
         $user->load('wallets');
 
-        // Build the response with wallet balances and total balance
-        $wallets = $user->wallets->map(function ($wallet) {
-            return [
-                'id'          => $wallet->id,
-                'name'        => $wallet->name,
-                'description' => $wallet->description,
-                'balance'     => $wallet->balance,
-                'created_at'  => $wallet->created_at,
-                'updated_at'  => $wallet->updated_at,
-            ];
-        });
-
-        return response()->json([
-            'data' => [
-                'id'            => $user->id,
-                'name'          => $user->name,
-                'email'         => $user->email,
-                'wallets'       => $wallets,
-                'total_balance' => $user->total_balance,
-                'created_at'    => $user->created_at,
-                'updated_at'    => $user->updated_at,
-            ],
-        ]);
+        return new UserResource($user);
     }
 }
